@@ -104,9 +104,15 @@ export default function PlasmaRegister() {
     fetchRecords();
 
   } catch (error) {
-    console.error(error);
-    alert("Failed to Save Record");
-  }
+  console.log("FULL ERROR:", error);
+  console.log("SERVER RESPONSE:", error.response?.data);
+
+  alert(
+    error.response?.data?.message ||
+    error.message ||
+    "Failed to Save Record"
+  );
+}
 };
      
 const handleEdit = (item) => {
