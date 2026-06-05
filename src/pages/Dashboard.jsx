@@ -49,36 +49,7 @@ export default function Dashboard() {
       </div>
 
     </div>
+    
   );
-  <div className="grid lg:grid-cols-4 gap-6">
-
-  <StatCard
-    title="Total Records"
-    value="145"
-    icon="📦"
-    bg="bg-blue-600"
-  />
-
-  <StatCard
-    title="Volume (mL)"
-    value="45230"
-    icon="💉"
-    bg="bg-sky-500"
-  />
-
-  <StatCard
-    title="This Month"
-    value="24"
-    icon="📊"
-    bg="bg-green-500"
-  />
-
-  <StatCard
-    title="Reports"
-    value="12"
-    icon="📋"
-    bg="bg-orange-500"
-  />
-
-</div>
+  
 }
