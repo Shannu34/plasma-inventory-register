@@ -1,178 +1,197 @@
 import { useState } from "react";
+import axios from "axios";
 
 export default function MonthlySummary() {
-  const [selectedMonth, setSelectedMonth] = useState("2026-05");
+  const [formData, setFormData] = useState({
+    summaryMonth: "",
+    openingBalance: "",
+    collectedVolume: "",
+    distributedVolume: "",
+    rejectedVolume: "",
+    closingStock: "",
+    qaSignoff: "",
+  });
 
-  const summaryData = {
-    openingBalance: 15000,
-    freshVolumeCollected: 4520,
-    distributedVolume: 1200,
-    rejectedVolume: 100,
-    closingStock: 18220,
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post(
+        "http://localhost:5000/api/monthly-summary",
+        {
+          summary_month: formData.summaryMonth,
+          opening_balance: formData.openingBalance,
+          collected_volume: formData.collectedVolume,
+          distributed_volume: formData.distributedVolume,
+          rejected_volume: formData.rejectedVolume,
+          closing_stock: formData.closingStock,
+          qa_signoff: formData.qaSignoff,
+        }
+      );
+
+      alert("Monthly Summary Saved Successfully");
+    } catch (error) {
+      console.error(error);
+       
+      alert(
+        error.response?.data?.message ||
+           error.message   );
+    }
   };
 
   return (
     <div className="max-w-7xl mx-auto">
 
-      {/* Header */}
-
-      <div className="bg-gradient-to-r from-green-600 to-emerald-500 text-white p-6 rounded-2xl mb-6">
-
+      <div className="bg-gradient-to-r from-blue-700 to-cyan-500 text-white p-8 rounded-3xl mb-8">
         <h1 className="text-3xl font-bold">
-          Monthly Inventory Summary
+          MONTHLY CUMULATIVE ACCOUNTABILITY SUMMARY
         </h1>
-
-        <p className="text-green-100 mt-2">
-          Plasma Inventory Accountability Report
-        </p>
-
       </div>
 
-      {/* Month Selection */}
+      <div className="bg-white shadow-lg rounded-3xl p-8">
 
-      <div className="bg-white p-6 rounded-2xl shadow mb-6">
+        <form onSubmit={handleSubmit}>
 
-        <label className="font-semibold mr-4">
-          Summary Month / Year
-        </label>
+          <div className="overflow-x-auto">
 
-        <input
-          type="month"
-          value={selectedMonth}
-          onChange={(e) =>
-            setSelectedMonth(e.target.value)
-          }
-          className="border rounded-lg p-2"
-        />
+            <table className="w-full border border-gray-300">
 
-      </div>
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border p-3">
+                    Summary Month / Year
+                  </th>
 
-      {/* Report Table */}
+                  <th className="border p-3">
+                    Opening Balance Stock
+                    <br />
+                    (Total Bags / Volume)
+                  </th>
 
-      <div className="bg-white rounded-2xl shadow overflow-hidden">
+                  <th className="border p-3">
+                    Total Fresh Volume Collected
+                    During Month (mL)
+                  </th>
 
-        <table className="w-full">
+                  <th className="border p-3">
+                    Total Plasma Consignments
+                    Distributed / Dispatched (mL)
+                  </th>
 
-          <thead>
+                  <th className="border p-3">
+                    Total Rejected/Inactivated Volume
+                    (mL)
+                  </th>
 
-            <tr className="bg-green-600 text-white">
+                  <th className="border p-3">
+                    Closing Net Stock
+                    In Deep Freezers (mL)
+                  </th>
 
-              <th className="p-4 text-left">
-                Summary Month / Year
-              </th>
+                  <th className="border p-3">
+                    QA Head Sign-off & Date
+                  </th>
+                </tr>
+              </thead>
 
-              <th className="p-4 text-left">
-                Opening Balance Stock
-              </th>
+              <tbody>
+                <tr>
 
-              <th className="p-4 text-left">
-                Fresh Volume Collected
-              </th>
+                  <td className="border p-2">
+                    <input
+                      type="month"
+                      name="summaryMonth"
+                      value={formData.summaryMonth}
+                      onChange={handleChange}
+                      className="w-full border p-2"
+                    />
+                  </td>
 
-              <th className="p-4 text-left">
-                Distributed / Dispatched
-              </th>
+                  <td className="border p-2">
+                    <input
+                      type="number"
+                      name="openingBalance"
+                      value={formData.openingBalance}
+                      onChange={handleChange}
+                      className="w-full border p-2"
+                    />
+                  </td>
 
-              <th className="p-4 text-left">
-                Rejected / Inactivated
-              </th>
+                  <td className="border p-2">
+                    <input
+                      type="number"
+                      name="collectedVolume"
+                      value={formData.collectedVolume}
+                      onChange={handleChange}
+                      className="w-full border p-2"
+                    />
+                  </td>
 
-              <th className="p-4 text-left">
-                Closing Net Stock
-              </th>
+                  <td className="border p-2">
+                    <input
+                      type="number"
+                      name="distributedVolume"
+                      value={formData.distributedVolume}
+                      onChange={handleChange}
+                      className="w-full border p-2"
+                    />
+                  </td>
 
-            </tr>
+                  <td className="border p-2">
+                    <input
+                      type="number"
+                      name="rejectedVolume"
+                      value={formData.rejectedVolume}
+                      onChange={handleChange}
+                      className="w-full border p-2"
+                    />
+                  </td>
 
-          </thead>
+                  <td className="border p-2">
+                    <input
+                      type="number"
+                      name="closingStock"
+                      value={formData.closingStock}
+                      onChange={handleChange}
+                      className="w-full border p-2"
+                    />
+                  </td>
 
-          <tbody>
+                  <td className="border p-2">
+                    <input
+                      type="text"
+                      name="qaSignoff"
+                      value={formData.qaSignoff}
+                      onChange={handleChange}
+                      placeholder="QA Head Name & Date"
+                      className="w-full border p-2"
+                    />
+                  </td>
 
-            <tr className="border-b hover:bg-green-50">
+                </tr>
+              </tbody>
 
-              <td className="p-4">
-                May 2026
-              </td>
+            </table>
 
-              <td className="p-4">
-                {summaryData.openingBalance} mL
-              </td>
-
-              <td className="p-4">
-                {summaryData.freshVolumeCollected} mL
-              </td>
-
-              <td className="p-4">
-                {summaryData.distributedVolume} mL
-              </td>
-
-              <td className="p-4">
-                {summaryData.rejectedVolume} mL
-              </td>
-
-              <td className="p-4 font-bold text-green-700">
-                {summaryData.closingStock} mL
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-      {/* QA Section */}
-
-      <div className="bg-white rounded-2xl shadow mt-6 p-6">
-
-        <div className="grid md:grid-cols-2 gap-6">
-
-          <div>
-            <label className="block font-semibold mb-2">
-              QA Head Sign-Off
-            </label>
-
-            <input
-              type="text"
-              placeholder="Enter QA Head Name"
-              className="w-full border rounded-lg p-3"
-            />
           </div>
 
-          <div>
-            <label className="block font-semibold mb-2">
-              Date
-            </label>
-
-            <input
-              type="date"
-              className="w-full border rounded-lg p-3"
-            />
+          <div className="mt-6">
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl"
+            >
+              Save Summary
+            </button>
           </div>
 
-        </div>
-
-      </div>
-
-      {/* Action Buttons */}
-
-      <div className="flex gap-4 mt-6">
-
-        <button className="bg-green-600 text-white px-6 py-3 rounded-lg">
-          Generate Report
-        </button>
-
-        <button className="bg-blue-600 text-white px-6 py-3 rounded-lg">
-          Export Excel
-        </button>
-
-        <button className="bg-red-600 text-white px-6 py-3 rounded-lg">
-          Export PDF
-        </button>
-
-        <button className="bg-slate-700 text-white px-6 py-3 rounded-lg">
-          Print
-        </button>
+        </form>
 
       </div>
 
